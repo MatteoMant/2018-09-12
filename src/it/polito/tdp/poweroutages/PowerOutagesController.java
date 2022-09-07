@@ -45,7 +45,10 @@ public class PowerOutagesController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	this.model.creaGrafo();
+    	txtResult.setText("Grafo creato!\n");
+    	txtResult.appendText("# Vertici : " + this.model.getNumVertici() + "\n");
+    	txtResult.appendText("# Archi : " + this.model.getNumArchi() + "\n");
     }
 
     @FXML
