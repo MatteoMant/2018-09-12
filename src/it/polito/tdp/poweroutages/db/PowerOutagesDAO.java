@@ -10,6 +10,7 @@ import java.util.Map;
 
 import it.polito.tdp.poweroutages.model.Adiacenza;
 import it.polito.tdp.poweroutages.model.Nerc;
+import it.polito.tdp.poweroutages.model.PowerOutage;
 
 public class PowerOutagesDAO {
 	
@@ -38,6 +39,32 @@ public class PowerOutagesDAO {
 		}
 
 		return nercList;
+	}
+	
+	public List<PowerOutage> getAllPowerOutages(Map<Integer, Nerc> idMap) {
+
+		String sql = "SELECT * FROM PowerOutages";
+		List<PowerOutage> result = new ArrayList<>();
+
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			ResultSet res = st.executeQuery();
+
+			while (res.next()) {
+				Nerc n = idMap.get(res.getInt("nerc_id"));
+				PowerOutage p = new PowerOutage(res.getInt("id"), n, res.getTimestamp("date_event_began").toLocalDateTime(), 
+						res.getTimestamp("date_event_finished").toLocalDateTime());
+				result.add(p);
+			}
+
+			conn.close();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		return result;
 	}
 	
 	public List<Adiacenza> getAllAdiacenze(Map<Integer, Nerc> idMap) {

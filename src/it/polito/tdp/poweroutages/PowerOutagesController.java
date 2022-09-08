@@ -6,6 +6,7 @@ package it.polito.tdp.poweroutages;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.poweroutages.model.Adiacenza;
@@ -60,7 +61,20 @@ public class PowerOutagesController {
 
     @FXML
     void doSimula(ActionEvent event) {
-
+    	try {
+    		int mesi = Integer.parseInt(txtK.getText());
+    		this.model.simula(mesi);
+    		txtResult.appendText("SIMULAZIONE TERMINATA!\n");
+    		txtResult.appendText("Il numero di catastrofi è stato di " + this.model.getNumCatastrofi() + "\n");
+    		txtResult.appendText("I bonus dei vari nerc sono: \n");
+    		Map<Nerc, Long> bonus = this.model.getBonus();
+    		for (Nerc n : bonus.keySet()) {
+    			txtResult.appendText(n + " -> " + bonus.get(n) + "\n");
+    		}
+    	} catch(NumberFormatException e) {
+    		txtResult.setText("Per favore inserire un numero di mesi valido!\n");
+    		return;
+    	}
     }
 
     @FXML

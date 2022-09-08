@@ -20,6 +20,10 @@ public class Model {
 	private Graph<Nerc, DefaultWeightedEdge> grafo;
 	private Map<Integer, Nerc> idMap;
 	
+	// Output della simulazione
+	private int numCatastrofi;
+	private Map<Nerc, Long> bonus;
+	
 	public Model() {
 		dao = new PowerOutagesDAO();
 		idMap = new HashMap<>();
@@ -39,6 +43,14 @@ public class Model {
 		}
 	}
 	
+	public void simula(int mesi) {
+		Simulatore sim = new Simulatore(this.grafo, this);
+		sim.init(mesi);
+		sim.run();
+		this.numCatastrofi = sim.getNumCatastrofi();
+		this.bonus = sim.getBonus();
+	}
+	
 	public List<Adiacenza> getVicini(Nerc n) {
 		List<Adiacenza> result = new LinkedList<>();
 		
@@ -51,6 +63,10 @@ public class Model {
 		return result;
 	}
 	
+	public List<PowerOutage> getAllPowerOutages(){
+		return this.dao.getAllPowerOutages(idMap);
+	}
+	
 	public Set<Nerc> getAllNerc(){
 		return this.grafo.vertexSet();
 	}
@@ -61,6 +77,14 @@ public class Model {
 	
 	public int getNumArchi() {
 		return this.grafo.edgeSet().size();
+	}
+
+	public int getNumCatastrofi() {
+		return numCatastrofi;
+	}
+
+	public Map<Nerc, Long> getBonus() {
+		return bonus;
 	}
 	
 }
