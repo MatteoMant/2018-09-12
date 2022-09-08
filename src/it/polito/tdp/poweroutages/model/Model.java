@@ -1,7 +1,11 @@
 package it.polito.tdp.poweroutages.model;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -33,6 +37,22 @@ public class Model {
 			int peso = dao.getCorrelation(a.getN1(), a.getN2());
 			Graphs.addEdge(this.grafo, a.getN1(), a.getN2(), peso);
 		}
+	}
+	
+	public List<Adiacenza> getVicini(Nerc n) {
+		List<Adiacenza> result = new LinkedList<>();
+		
+		for (Nerc vicino : Graphs.neighborListOf(this.grafo, n)) {
+			int peso = (int)this.grafo.getEdgeWeight(this.grafo.getEdge(n, vicino));
+			result.add(new Adiacenza(n, vicino, peso));
+		}
+		
+		Collections.sort(result);
+		return result;
+	}
+	
+	public Set<Nerc> getAllNerc(){
+		return this.grafo.vertexSet();
 	}
 	
 	public int getNumVertici() {

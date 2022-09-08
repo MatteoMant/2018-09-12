@@ -1,6 +1,6 @@
 package it.polito.tdp.poweroutages.model;
 
-public class Adiacenza {
+public class Adiacenza implements Comparable<Adiacenza>{
 	
 	private Nerc n1;
 	private Nerc n2;
@@ -35,6 +35,11 @@ public class Adiacenza {
 
 	public void setPeso(int peso) {
 		this.peso = peso;
+	}
+
+	@Override
+	public int compareTo(Adiacenza other) {
+		return other.getPeso() - this.getPeso();
 	}
 	
 }

@@ -5,9 +5,12 @@
 package it.polito.tdp.poweroutages;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.poweroutages.model.Adiacenza;
 import it.polito.tdp.poweroutages.model.Model;
+import it.polito.tdp.poweroutages.model.Nerc;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,7 +35,7 @@ public class PowerOutagesController {
     private Button btnCreaGrafo; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbBoxNerc"
-    private ComboBox<?> cmbBoxNerc; // Value injected by FXMLLoader
+    private ComboBox<Nerc> cmbBoxNerc; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnVisualizzaVicini"
     private Button btnVisualizzaVicini; // Value injected by FXMLLoader
@@ -45,10 +48,14 @@ public class PowerOutagesController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	cmbBoxNerc.getItems().clear();
     	this.model.creaGrafo();
     	txtResult.setText("Grafo creato!\n");
     	txtResult.appendText("# Vertici : " + this.model.getNumVertici() + "\n");
     	txtResult.appendText("# Archi : " + this.model.getNumArchi() + "\n");
+    	
+    	// Dopo aver creato il grafo possiamo popolare la tendina dei Nerc 
+    	cmbBoxNerc.getItems().addAll(this.model.getAllNerc());
     }
 
     @FXML
@@ -58,7 +65,20 @@ public class PowerOutagesController {
 
     @FXML
     void doVisualizzaVicini(ActionEvent event) {
-
+    	Nerc n = cmbBoxNerc.getValue();
+    	if (n == null) {
+    		txtResult.setText("Per favore selezionare un Nerc dalla tendina");
+    		return;
+    	}
+    	List<Adiacenza> vicini = this.model.getVicini(n);
+    	if (vicini == null) {
+    		txtResult.setText("NON sono presenti vicini per il nerc selezionato!");
+    		return;
+    	}
+    	txtResult.setText("I vicini del nerc '" + n + "' sono: \n");
+    	for (Adiacenza a : vicini) {
+    		txtResult.appendText(a.getN2() + " - " + a.getPeso() + "\n");
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -74,6 +94,5 @@ public class PowerOutagesController {
     
     public void setModel(Model model) {
 		this.model = model;
-
 	}
 }
