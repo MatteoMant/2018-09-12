@@ -27,7 +27,7 @@ public class Simulatore {
 	
 	// Stato del mondo
 	private Graph<Nerc, DefaultWeightedEdge> grafo;
-	private Map<Nerc, Set<Nerc>> prestiti;
+	private Map<Nerc, Set<Nerc>> prestiti; 
 	private Model model;
 	
 	public Simulatore(Graph<Nerc, DefaultWeightedEdge> grafo, Model model) {
@@ -75,7 +75,7 @@ public class Simulatore {
 			Nerc donatore = null;
 			
 			if (this.prestiti.get(nerc).size() > 0) { // allora significa che il nerc in questione ha prestato energia ad altri nerc
-				// Quindi in questo caso scegliamo il donatore tra i miei "debitori" ovvero coloro a cui ho prestato corrente
+				// Quindi in questo caso scegliamo il donatore tra i suoi "debitori" ovvero coloro a cui ha prestato corrente
 				double minimo = Long.MAX_VALUE;
 				for (Nerc n : this.prestiti.get(nerc)) {
 					double peso = this.grafo.getEdgeWeight(this.grafo.getEdge(nerc, n));

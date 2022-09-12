@@ -85,7 +85,7 @@ public class PowerOutagesController {
     		return;
     	}
     	List<Adiacenza> vicini = this.model.getVicini(n);
-    	if (vicini == null) {
+    	if (vicini.isEmpty()) {
     		txtResult.setText("NON sono presenti vicini per il nerc selezionato!");
     		return;
     	}
